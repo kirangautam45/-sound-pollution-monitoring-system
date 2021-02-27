@@ -13,7 +13,7 @@ unsigned int sample;
 #define PIN_MODERATE D4
 #define PIN_LOUD D5
 char auth[] = "2NauRnAmwHgKSSfVXrpssR8Ud8Jvk2lZ";
-String apiKey = "C83CVHIBPQLYXN8F"; // Enter your Write API key from ThingSpeak
+String apiKey = "A2L4O6NCDAE49T3B"; // Enter your Write API key from ThingSpeak
 const char *ssid = "kiran";     // replace with your wifi ssid and wpa2 key
 const char *pass = "12345678";
 const char* server = "api.thingspeak.com";
@@ -96,38 +96,41 @@ void loop ()
       }
    }
    peakToPeak = signalMax - signalMin;                    // max - min = peak-peak amplitude
-   int db = map(peakToPeak,20,600,49.5,60);             //calibrate for deciBels
+   int db = map(peakToPeak,20,900,49,90);              //calibrate for deciBels
  
   lcd.setCursor(0, 0);
   lcd.print("Loudness: ");
   lcd.print(db);
   lcd.print("dB");
   
-  if (db <=50)
+  if (db <=55)
   {
     lcd.setCursor(0, 1);
     lcd.print("Level: Quite");
     digitalWrite(PIN_QUIET, HIGH);
     digitalWrite(PIN_MODERATE, LOW);
     digitalWrite(PIN_LOUD, LOW);
-   
   }
-//  else if (db > 30 && db<65)
-//  {
-//    lcd.setCursor(0, 1);
-//    lcd.print("Level: Moderate");
-//    digitalWrite(PIN_QUIET, LOW);
-//    digitalWrite(PIN_MODERATE, HIGH);
-//    digitalWrite(PIN_LOUD, LOW);
-//  }
-  else if (db>=50)
+
+
+
+ else if (db > 55 && db<85)
+  {
+    lcd.setCursor(0, 1);
+    lcd.print("Level: Moderate");
+    digitalWrite(PIN_QUIET, LOW);
+    digitalWrite(PIN_MODERATE, HIGH);
+    digitalWrite(PIN_LOUD, LOW);
+  Blynk.notify("noise pollution record Moderate");
+  }
+  else if (db>=85)
   {
     lcd.setCursor(0, 1);
     lcd.print("Level: High");
     digitalWrite(PIN_QUIET, LOW);
     digitalWrite(PIN_MODERATE, LOW);
-    digitalWrite(PIN_LOUD, HIGH);
-     Blynk.notify("noise pollution record");
+    digitalWrite(PIN_LOUD, HIGH); 
+    Blynk.notify("noise pollution record High");
  
   }
    
